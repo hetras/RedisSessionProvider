@@ -94,14 +94,14 @@
         {
             // record with local shared session storage that we are done with the session so it gets
             //      cleared out sooner
-            RedisSessionStateItemCollection items =
-                this.SharedSessions.GetSessionForEndRequest(this.SessionRedisHashKey);
+            //RedisSessionStateItemCollection items =
+            //    this.SharedSessions.GetSessionForEndRequest(this.SessionRedisHashKey);
 
-            if (items != null)
+            if (Session.Items != null)
             {
                 RedisSessionStateStoreProvider.SerializeToRedis(
                     this.RequestContext,
-                    items,
+                    Session.Items,
                     this.SessionRedisHashKey,
                     RedisSessionConfig.SessionTimeout);
             }
@@ -113,13 +113,13 @@
         {
             private string sessionID;
 
-            public FakeHttpSessionState(ISessionStateItemCollection items, string sessID)
+            public FakeHttpSessionState(RedisSessionStateItemCollection items, string sessID)
             {
                 this.Items = items;
                 this.sessionID = sessID;
             }
 
-            protected ISessionStateItemCollection Items { get; set; }
+            public RedisSessionStateItemCollection Items { get; set; }
 
             public override void Add(string name, object value)
             {

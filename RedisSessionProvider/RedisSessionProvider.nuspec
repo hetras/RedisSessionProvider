@@ -20,6 +20,7 @@ Please visit the project page at https://github.com/welegan/RedisSessionProvider
 explanation of this and other behaviors.
 
 =================== Version Changelog ===================
+V1.2.8.1: Removed session local cache to be used without sticky sessions
 
 V1.2.8: Updated Json.NET dependency to 6.03, StackExchange.Redis to 1.0.322
 
