@@ -12,3 +12,4 @@
 /RedisSessionProvider/*.nupkg
 /RedisSessionProviderUnitTests/bin
 /RedisSessionProviderUnitTests/obj
+.vs/
