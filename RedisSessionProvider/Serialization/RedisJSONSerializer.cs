@@ -23,6 +23,33 @@
     public class RedisJSONSerializer : IRedisSerializer
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="RedisJSONSerializer"/> class.
+        /// </summary>
+        public RedisJSONSerializer()
+        {
+            this.SerializerSettings = new JsonSerializerSettings();
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RedisJSONSerializer"/> class.
+        /// </summary>
+        /// <param name="settings">The serialization settings.</param>
+        public RedisJSONSerializer(JsonSerializerSettings settings)
+        {
+            this.SerializerSettings = settings;
+        }
+
+
+        /// <summary>
+        /// Gets or sets the settings used by the JSON serializer.
+        /// </summary>
+        /// <value>
+        /// A <see cref="JsonSerializerSettings"/> object.
+        /// </value>
+        public JsonSerializerSettings SerializerSettings { get; set; }
+
+        /// <summary>
         /// Shared concurrent dictionary to optimize type-safe deserialization from json, since
         /// we store the type info in the string
         /// </summary>
@@ -181,7 +208,7 @@
                     }
                     else
                     {
-                        typeData = JsonConvert.DeserializeObject<Type>(typeInfoString);
+                        typeData = JsonConvert.DeserializeObject<Type>(typeInfoString, this.SerializerSettings);
 
                         #region tryCacheTypeInfo
                         try
@@ -206,7 +233,8 @@
 
                     return JsonConvert.DeserializeObject(
                         objRaw.Substring(fieldTypeMatch.Length),
-                        typeData);
+                        typeData,
+                        this.SerializerSettings);
                 }
             }
             else
@@ -300,10 +328,10 @@
                 }
                 else
                 {
-                    typeInfo = JsonConvert.SerializeObject(objType);
+                    typeInfo = JsonConvert.SerializeObject(objType, this.SerializerSettings);
                 }
                 
-                string objInfo = JsonConvert.SerializeObject(origObj);
+                string objInfo = JsonConvert.SerializeObject(origObj, this.SerializerSettings);
 
                 return string.Format(this.typeInfoPattern, typeInfo) + objInfo;
             }
